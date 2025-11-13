@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Produtos</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <header>
+        <h2>🍞 Cadastro de Produtos</h2>
+        <nav>
+            <a href="/dashboard">🏠 Início</a>
+            <a href="/gestao-estoque">📦 Estoque</a>
+            <a href="/logout">🚪 Sair</a>
+        </nav>
+    </header>
+    <main>
+        <form action="/cadastro-produto" method="POST">
+            <input type="text" name="sku" placeholder="SKU">
+            <input type="text" name="name" placeholder="Nome do produto" required>
+            <input type="text" name="brand" placeholder="Marca">
+            <input type="text" name="model" placeholder="Modelo">
+            <input type="text" name="description" placeholder="Descrição">
+            <input type="text" name="unit" placeholder="Unidade">
+            <input type="number" name="qty" placeholder="Quantidade">
+            <input type="number" name="min_stock" placeholder="Estoque mínimo">
+            <button type="submit">Adicionar Produto</button>
+        </form>
+
+        <h3>Produtos Cadastrados</h3>
+        <table>
+            <tr>
+                <th>Nome</th>
+                <th>Qtd Atual</th>
+                <th>Estoque Mínimo</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+            <% produtos.forEach(p=> { %>
+                <tr>
+                    <td>
+                        <%= p.name %>
+                    </td>
+                    <td>
+                        <%= p.qty %>
+                    </td>
+                    <td>
+                        <%= p.min_stock %>
+                    </td>
+                    <td>
+                        <% if (p.qty < p.min_stock) { %>
+                            <span style="color: red; font-weight: bold;">⚠️ BAIXO</span>
+                            <% } else { %>
+                                <span style="color: green;">✅ OK</span>
+                                <% } %>
+                    </td>
+                    <td>
+                        <button
+                            onclick="editarProduto(<%= p.id %>, '<%= p.name %>', <%= p.qty %>, <%= p.min_stock %>)">✏️
+                            Editar</button>
+                        <form action="/cadastro-produto/delete/<%= p.id %>" method="POST" style="display: inline;">
+                            <button type="submit" onclick="return confirm('Deseja realmente excluir?')">🗑️
+                                Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }) %>
+        </table>
+
+        <!-- Modal de Edição -->
+        <div id="modalEdicao"
+            style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 2px solid #333; z-index: 1000;">
+            <h3>Editar Produto</h3>
+            <form id="formEdicao" method="POST">
+                <input type="text" id="editNome" name="name" placeholder="Nome" required>
+                <input type="number" id="editQty" name="qty" placeholder="Quantidade" required>
+                <input type="number" id="editMinStock" name="min_stock" placeholder="Estoque Mínimo" required>
+                <button type="submit">Salvar</button>
+                <button type="button" onclick="fecharModal()">Cancelar</button>
+            </form>
+        </div>
+        <div id="overlay"
+            style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"
+            onclick="fecharModal()"></div>
+
+        <script>
+            function editarProduto(id, nome, qty, minStock) {
+                document.getElementById('formEdicao').action = '/cadastro-produto/update/' + id;
+                document.getElementById('editNome').value = nome;
+                document.getElementById('editQty').value = qty;
+                document.getElementById('editMinStock').value = minStock;
+                document.getElementById('modalEdicao').style.display = 'block';
+                document.getElementById('overlay').style.display = 'block';
+            }
+
+            function fecharModal() {
+                document.getElementById('modalEdicao').style.display = 'none';
+                document.getElementById('overlay').style.display = 'none';
+            }
+        </script>
+    </main>
+</body>
+
+</html>

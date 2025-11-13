@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Cantina Escolar</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <header>
+        <h2>🥐 Bem-vindo, <%= usuario.name %>
+        </h2>
+        <nav>
+            <a href="/cadastro-produto">📦 Produtos</a>
+            <a href="/gestao-estoque">📋 Estoque</a>
+            <a href="/logout">🚪 Sair</a>
+        </nav>
+    </header>
+    <main>
+        <h3>Resumo</h3>
+        <p>Total de Produtos: <%= totalProdutos %>
+        </p>
+        <p>Total de Movimentações: <%= totalMov %>
+        </p>
+        <h4>⚠️ Produtos com estoque baixo:</h4>
+        <% if (produtosBaixos.length===0) { %>
+            <p style="color: green;">✅ Todos os produtos estão com estoque adequado!</p>
+            <% } else { %>
+                <ul>
+                    <% produtosBaixos.forEach(p=> { %>
+                        <li>
+                            <%= p.name %> - Estoque atual: <strong style="color: red;">
+                                    <%= p.qty %>
+                                </strong> | Mínimo: <%= p.min_stock %>
+                        </li>
+                        <% }) %>
+                </ul>
+                <% } %>
+    </main>
+</body>
+
+</html>

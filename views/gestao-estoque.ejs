@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Gestão de Estoque</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <header>
+        <h2>📦 Gestão de Estoque</h2>
+        <nav>
+            <a href="/dashboard">🏠 Início</a>
+            <a href="/cadastro-produto">🍞 Produtos</a>
+            <a href="/logout">🚪 Sair</a>
+        </nav>
+    </header>
+
+    <main>
+        <form action="/gestao-estoque" method="POST">
+            <select name="product_id" required id="selectProduto" onchange="mostrarEstoqueAtual()">
+                <option value="">Selecione o produto</option>
+                <% produtos.forEach(p=> { %>
+                    <option value="<%= p.id %>" data-qty="<%= p.qty %>" data-min="<%= p.min_stock %>">
+                        <%= p.name %> (Estoque: <%= p.qty %> / Mín: <%= p.min_stock %>)
+                    </option>
+                    <% }) %>
+            </select>
+            <div id="alertaEstoque" style="padding: 10px; margin: 10px 0; display: none;"></div>
+            <select name="type">
+                <option value="entrada">Entrada</option>
+                <option value="saida">Saída</option>
+            </select>
+            <input type="number" name="quantity" placeholder="Quantidade" required min="1">
+            <input type="date" name="movement_date" required>
+            <input type="text" name="note" placeholder="Observação">
+            <button type="submit">Registrar</button>
+        </form>
+
+        <script>
+            function mostrarEstoqueAtual() {
+                const select = document.getElementById('selectProduto');
+                const option = select.options[select.selectedIndex];
+                const alerta = document.getElementById('alertaEstoque');
+
+                if (option.value) {
+                    const qty = parseInt(option.dataset.qty);
+                    const min = parseInt(option.dataset.min);
+
+                    alerta.style.display = 'block';
+
+                    if (qty < min) {
+                        alerta.style.background = '#ffebee';
+                        alerta.style.color = '#c62828';
+                        alerta.innerHTML = '⚠️ <strong>ATENÇÃO:</strong> Estoque atual (' + qty + ') está abaixo do mínimo (' + min + ')!';
+                    } else if (qty === min) {
+                        alerta.style.background = '#fff3e0';
+                        alerta.style.color = '#ef6c00';
+                        alerta.innerHTML = '⚡ <strong>ALERTA:</strong> Estoque no limite mínimo (' + min + ')';
+                    } else {
+                        alerta.style.background = '#e8f5e9';
+                        alerta.style.color = '#2e7d32';
+                        alerta.innerHTML = '✅ Estoque OK: ' + qty + ' unidades (Mínimo: ' + min + ')';
+                    }
+                } else {
+                    alerta.style.display = 'none';
+                }
+            }
+        </script>
+
+        <h3>Últimas Movimentações</h3>
+        <% if (movimentos.length===0) { %>
+            <p style="color: #666;">Nenhuma movimentação registrada ainda.</p>
+            <% } else { %>
+                <table>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Tipo</th>
+                        <th>Qtd</th>
+                        <th>Data</th>
+                        <th>Saldo</th>
+                        <th>Usuário</th>
+                        <th>Nota</th>
+                    </tr>
+                    <% movimentos.forEach(m=> { %>
+                        <tr>
+                            <td>
+                                <%= m.produto %>
+                            </td>
+                            <td>
+                                <% if (m.type==='entrada' ) { %>
+                                    <span style="color: green; font-weight: bold;">⬆️ Entrada</span>
+                                    <% } else { %>
+                                        <span style="color: red; font-weight: bold;">⬇️ Saída</span>
+                                        <% } %>
+                            </td>
+                            <td style="font-weight: bold;">
+                                <%= m.quantity %>
+                            </td>
+                            <td>
+                                <%= m.data %>
+                            </td>
+                            <td style="font-weight: bold;">
+                                <%= m.balance_after %>
+                            </td>
+                            <td>
+                                <%= m.usuario %>
+                            </td>
+                            <td>
+                                <%= m.note || '-' %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </table>
+                <% } %>
+    </main>
+</body>
+
+</html>

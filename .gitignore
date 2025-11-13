@@ -1,0 +1,133 @@
+# ==========================================
+# 🥐 Sistema Cantina Escolar - .gitignore
+# ==========================================
+
+# ==========================================
+# 📦 Node.js
+# ==========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ==========================================
+# 🔐 Arquivos Sensíveis
+# ==========================================
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Credenciais do banco de dados
+config/database.js
+config/credentials.json
+
+# ==========================================
+# 💾 Backups e Dados
+# ==========================================
+*.sql.backup
+backup_*.sql
+dumps/
+backups/
+*.dump
+
+# ==========================================
+# 🖥️ Sistema Operacional
+# ==========================================
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ==========================================
+# 💻 IDEs e Editores
+# ==========================================
+
+# Visual Studio Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json.example
+*.code-workspace
+
+# JetBrains (WebStorm, IntelliJ)
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# ==========================================
+# 🧪 Testes e Cobertura
+# ==========================================
+coverage/
+.nyc_output/
+*.lcov
+test-results/
+
+# ==========================================
+# 📝 Logs
+# ==========================================
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ==========================================
+# 🚀 Build e Dist
+# ==========================================
+dist/
+build/
+out/
+.cache/
+.temp/
+tmp/
+
+# ==========================================
+# 📸 Uploads e Assets Temporários
+# ==========================================
+uploads/
+temp-uploads/
+public/uploads/
+*.tmp
+
+# ==========================================
+# 🔧 Outros
+# ==========================================
+.eslintcache
+.npm
+.node_repl_history
+.pnp.*
+.yarn-integrity
